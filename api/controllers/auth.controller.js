@@ -1,5 +1,9 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
 import prisma from "../lib/prisma.js";
+
+dotenv.config();
 
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
@@ -40,14 +44,27 @@ export const login = async (req, res) => {
 
 
     //GENERATE COOKIE TOKEN AND SEND TO THE USER
-    res.setHeader("Set-Cookie", "test=" + "myValue").json("sucess");
+    const AGE = 1000 * 60 * 60 * 24 * 7;
+
+    const token = jwt.sign(
+    {
+        id: user.id
+    }, 
+    process.env.JWT_SECRET_KEY, 
+    { expiresIn: AGE});
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        // secure: true
+        maxAge: AGE,
+    }).status(200).json({ message: "Login Successfull" });
 
     } catch(err) {
         console.log(err);
-        res.status(500).json({ message: "Failed to login!" })
+        res.status(500).json({ message: "Failed to login!" });
     };
 };
 
 export const logout = (req, res) => {
-    // db operations
+    res.clearCookie("token").status(200).json({ message: "Logout Successfull" });
 }
