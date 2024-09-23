@@ -51,7 +51,7 @@ export const login = async (req, res) => {
             id: user.id
         }, 
         process.env.JWT_SECRET_KEY, 
-        { expiresIn: AGE});
+        { expiresIn: AGE });
 
         const {password: userPassword, ...userInfo} = user;
 
