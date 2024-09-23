@@ -1,5 +1,5 @@
 import "./register.scss";
-import apiRequest from "../../../../api/lib/apiRequest";
+import apiRequest from "../../lib/apiRequest";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
